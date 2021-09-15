@@ -20,7 +20,7 @@ jobs:
           working_directory: ~/
           name: Run tests
           command: |
-            dotnet test HotelBooking.UnitTests/HotelBooking.UnitTests.csproj
+            dotnet test HotelBooking.UnitTests.csproj
             
 
 workflows:

@@ -11,8 +11,8 @@ jobs:
     docker:
       - image: microsoft/dotnet:latest
         auth:
-          username: mydockerhub-user
-          password: $DOCKERHUB_PASSWORD.pwd  # context / project UI env-var reference
+          username: devial4
+          password: $DOCKERHUB_PASSWORD_pwd  # context / project UI env-var reference
     steps:
       # Checkout the code as the first step.
       - checkout

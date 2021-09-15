@@ -12,7 +12,7 @@ jobs:
       - image: microsoft/dotnet:latest
         auth:
           username: devial4
-          password: $DOCKERHUB_PASSWORD_pwd  # context / project UI env-var reference
+          password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
     steps:
       # Checkout the code as the first step.
       - checkout

@@ -9,18 +9,17 @@ namespace HotelBooking.UnitTests
 {
     public class BookingManagerTests
     {
-        private IBookingManager bookingManager;
-        Mock<IRepository<Booking>> fakeBookingRepository;
-        Mock<IRepository<Room>> fakeRoomRepository;
+        private readonly IBookingManager bookingManager;
+        private readonly Mock<IRepository<Booking>> bookingRepository;
+        private readonly Mock<IRepository<Room>> roomRepository;
 
         public BookingManagerTests(){
-            DateTime start = DateTime.Today.AddDays(10);
-            DateTime end = DateTime.Today.AddDays(20);
-            IRepository<Booking> bookingRepository = new FakeBookingRepository(start, end);
-            IRepository<Room> roomRepository = new FakeRoomRepository();
-            bookingManager = new BookingManager(bookingRepository, roomRepository);
 
-            fakeBookingRepository = new Mock<IRepository<Booking>>();
+            bookingRepository = new Mock<IRepository<Booking>>();
+            roomRepository = new Mock<IRepository<Room>>();
+            bookingManager = new BookingManager(bookingRepository.Object, roomRepository.Object);
+
+            bookingRepository = new Mock<IRepository<Booking>>();
 
             var fakeBookings = new List<Booking>
             {
@@ -44,9 +43,9 @@ namespace HotelBooking.UnitTests
                 }
             };
 
-            fakeBookingRepository.Setup(bookings => bookings.GetAll()).Returns(fakeBookings);
+            bookingRepository.Setup(bookings => bookings.GetAll()).Returns(fakeBookings);
 
-            fakeRoomRepository = new Mock<IRepository<Room>>();
+
 
             var fakeRooms = new List<Room>
             {
@@ -62,9 +61,9 @@ namespace HotelBooking.UnitTests
                 }
             };
 
-            fakeRoomRepository.Setup(fakeRooms => fakeRooms.GetAll()).Returns(fakeRooms);
+            roomRepository.Setup(fakeRooms => fakeRooms.GetAll()).Returns(fakeRooms);
             
-            bookingManager = new BookingManager(fakeBookingRepository.Object, fakeRoomRepository.Object);
+            bookingManager = new BookingManager(bookingRepository.Object, roomRepository.Object);
         }
 
         [Fact]

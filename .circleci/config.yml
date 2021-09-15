@@ -10,6 +10,7 @@ jobs:
     # Be sure to update the tag on this image to a more stable version, using latest can result in unstable builds.
     docker:
       - image: mcr.microsoft.com/dotnet/sdk:5.0
+    parallelism: 4
     steps:
       # Checkout the code as the first step.
       - checkout

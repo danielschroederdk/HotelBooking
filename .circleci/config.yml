@@ -20,7 +20,7 @@ jobs:
           working_directory: ~/HotelBooking.UnitTests
           name: Run tests
           command: |
-            dotnet test
+            dotnet test working_directory
             
 
 workflows:

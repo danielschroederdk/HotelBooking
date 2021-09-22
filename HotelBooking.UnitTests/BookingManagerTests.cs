@@ -45,8 +45,6 @@ namespace HotelBooking.UnitTests
 
             bookingRepository.Setup(bookings => bookings.GetAll()).Returns(fakeBookings);
 
-
-
             var fakeRooms = new List<Room>
             {
                 new()
@@ -64,6 +62,22 @@ namespace HotelBooking.UnitTests
             roomRepository.Setup(fakeRooms => fakeRooms.GetAll()).Returns(fakeRooms);
             
             bookingManager = new BookingManager(bookingRepository.Object, roomRepository.Object);
+        }
+        
+        public static IEnumerable<object[]> GetLocalData()
+        {
+            DateTime startDate = DateTime.Today.AddMonths(1);
+            DateTime endDate = DateTime.Today.AddMonths(2);
+
+
+            var data = new List<object[]>
+            {
+                new object[] { startDate.AddMonths(2), endDate.AddMonths(3), true },
+                new object[] { startDate, endDate, false },
+
+            };
+
+            return data;
         }
 
         [Fact]
@@ -109,25 +123,24 @@ namespace HotelBooking.UnitTests
             Assert.Throws<ArgumentException>(() => bookingManager.GetFullyOccupiedDates(startDate, endDate));
         }
 
-        [Fact]
-        public void CreatingABooking_AllRoomsOccupied_ReturnsFalse()
+        [Theory]
+        [MemberData(nameof(GetLocalData))]
+        public void CreatingABooking_AllRoomsOccupied_ReturnsCorrectBool(DateTime startDate, DateTime endDate, bool expectedResult)
         {
             // Arange
             var booking = new Booking
             {
-                Id = 20,
-                CustomerId = 2,
-                RoomId = 22,
-                IsActive = true,
-                StartDate = DateTime.Now.AddMonths(1),
-                EndDate = DateTime.Now.AddMonths(2)
+                CustomerId = 1,
+                StartDate = startDate,
+                EndDate = endDate
             };
             
             // Act
             bool createBooking = bookingManager.CreateBooking(booking);
             
             // Assert
-            Assert.False(createBooking);
+            Assert.Equal(expectedResult, createBooking);
+            //Assert.False(createBooking);
         }
         
         [Fact]
@@ -149,6 +162,29 @@ namespace HotelBooking.UnitTests
             
             // Assert
             Assert.True(createBooking);
+        }
+
+        [Fact]
+        public void CreateBooking_Verify_AddBooking()
+        {
+            // Arange
+            var booking = new Booking
+            {
+                Id = 20,
+                CustomerId = 2,
+                RoomId = 22,
+                IsActive = true,
+                StartDate = DateTime.Now.AddMonths(2),
+                EndDate = DateTime.Now.AddMonths(3)
+            };
+
+            bookingRepository.Setup(bookings => bookings.Add(It.IsAny<Booking>()));
+
+            // Act
+            bool createBooking = bookingManager.CreateBooking(booking);
+            
+            // Verify
+            bookingRepository.Verify(x=>x.Add(It.Is<Booking>(_ => _.Id == booking.Id)), Times.Once());
         }
     }
 }

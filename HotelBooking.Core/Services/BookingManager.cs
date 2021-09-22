@@ -18,7 +18,7 @@ namespace HotelBooking.Core
 
         public bool CreateBooking(Booking booking)
         {
-            int roomId = FindAvailableRoom(booking.StartDate, booking.EndDate);
+            var roomId = FindAvailableRoom(booking.StartDate, booking.EndDate);
 
             if (roomId >= 0)
             {

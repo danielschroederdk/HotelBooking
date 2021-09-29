@@ -27,8 +27,8 @@ jobs:
     steps:
       - checkout
       - newman/newman-run:
-          collection: ./Users.postman_collection.json
-          environment: ./My-Remote-API-Testing.postman_environment.json
+          collection: ./HotelBooking.postman_collection.json
+
 workflows:
   # Below is the definition of your workflow.
   # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
